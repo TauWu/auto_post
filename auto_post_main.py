@@ -17,7 +17,7 @@ def user_cmd(opt_id):
             print("用户【%s】的信息如下\n密码：%s\n用户类型：%s"%(pwd[0],pwd[1],user_type_dict[str(pwd[2])]))
         else:
             password = input("请输入需要%s操作的密码\n"%opt)
-            usertype = int(input("请输入需要%s操作的用户类型 1-只有安居客 2-既有安居客又有58同城\n"%opt))
+            usertype = int(input("\n请输入需要%s操作的用户类型 1-只有安居客 2-既有安居客又有58同城\n"%opt))
             if usertype not in [1, 2]:
                 raise ValueError("用户类型错误！")
 
@@ -29,8 +29,6 @@ def user_cmd(opt_id):
                 user.update_user(username, password, usertype)
             else:
                 raise ValueError("没有这个操作")
-    except ValueError:
-        raise
     except Exception as e:
         base_err(str(e))
     finally:
