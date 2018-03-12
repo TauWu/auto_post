@@ -11,7 +11,8 @@ CREATE TABLE `auto_post_users` (
   `deleted` int DEFAULT 0 COMMENT '删除标记',
   `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 推广房源信息表

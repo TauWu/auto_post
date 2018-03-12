@@ -6,3 +6,11 @@ from
 where
     username = '{username}' and deleted = 0
 '''
+
+insert_user_sql = '''
+insert into
+    auto_post_users
+    (`username`, `password`, `usertype`, `name`)
+values
+    ('{username}', '{password}', {usertype}, '{name}')
+'''
