@@ -14,3 +14,13 @@ insert into
 values
     ('{username}', '{password}', {usertype}, '{name}')
 '''
+
+update_user_sql = '''
+update
+    auto_post_users
+set
+    password = '{password}', usertype = {usertype},
+    name = '{name}'
+where
+    username = '{username}'
+'''

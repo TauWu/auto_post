@@ -8,8 +8,10 @@ if __name__ == '__main__':
     try:
         user = User()
         user.insert_user("测试用户","测试密码",1,"测试中文名")
-        pwd = user.get_user_password('测试用户')
-        print(pwd)
+        print(user.get_user_password('测试用户'))
+        print(user.user_exist("啊哈"))
+        user.update_user("测试用户","2133123",1,"testName")
+        print(user.get_user_password('测试用户'))
     except Exception as e:
         base_info(str(e))
     finally:
