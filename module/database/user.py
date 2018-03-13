@@ -1,14 +1,7 @@
 # 用户表操作
 from util.database import DBController
 from util.common.logger import use_logger
-
-@use_logger(level="info")
-def db_info(msg):
-    pass
-
-@use_logger(level="err")
-def db_err(msg):
-    pass
+from constant.logger import db_err
 
 class User(DBController):
 

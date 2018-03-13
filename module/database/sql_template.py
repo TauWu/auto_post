@@ -24,3 +24,12 @@ set
 where
     username = '{username}'
 '''
+
+insert_house_info_sql = '''
+insert into
+    auto_post_house_info
+    (`sheet`, `idx`, `community`, `floor`, `total_floor`,
+     `addr`, `area`, `price`, `title`)
+values
+    ('%s', %s, '%s', %s, %s, '%s', %s, %s, '%s')
+'''

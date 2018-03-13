@@ -4,7 +4,7 @@
 from sys import argv
 
 from module.database.user import User
-from module.xlsx.house_list_reader import HouseListReader
+from module.database.house_info import HouseInfoXlsx
 from util.common.logger import base_info, base_err
 from constant.dict import *
 
@@ -39,8 +39,8 @@ def user_cmd(opt_id):
 if __name__ == '__main__':
 
     if len(argv) == 1:
-        h = HouseListReader("house_list.xlsx")
-        h.vaild_data
+        x = HouseInfoXlsx("house_list.xlsx")
+        x.insert_data
 
 
     if len(argv) == 2:

@@ -2,6 +2,7 @@
 
 from util.common.xlsx_reader import XlsxReader
 from constant.list import houseinfo_sheet_comfirm_list
+from constant.logger import vld_err
 
 def single_dict(indict):
     keys = indict.keys()
@@ -15,46 +16,49 @@ def vaild_content(sheetname, index, content):
     '''验证函数 传入一个待确认的列表list 户型和定价方式不做验证'''
     try:
         community_name = content[0]
-        splited_floor = content[1].strip().split('/')
+        try:
+            splited_floor = content[1].strip().split('/')
+        except Exception:
+            raise RuntimeError("楼层信息有误")
         full_address = content[2].strip()
         house_title = content[7].strip()
 
         if len(community_name) == 0:
-            raise RuntimeError("序号[%d] 小区名称为空" % index)
+            raise RuntimeError("小区名称为空")
 
         if len(full_address) == 0:
-            raise RuntimeError("序号[%d] 完整地址为空" % index)
+            raise RuntimeError("完整地址为空")
 
         if len(house_title) == 0:
-            raise RuntimeError("序号[%d] 房源标题为空" % index)
+            raise RuntimeError("房源标题为空")
 
         try:
             index = int(index)
         except Exception:
-            raise RuntimeError("序号[%d] 不是数字" % index)
+            raise RuntimeError("序号不是数字")
 
         try:
             current_floor = int(splited_floor[0])
         except Exception:
-            raise RuntimeError("序号[%d] 当前楼层不是数字" % index)
+            raise RuntimeError("当前楼层不是数字")
 
         try:
             total_floor = int(splited_floor[1])
         except Exception:
-            raise RuntimeError("序号[%d] 总楼层不是数字" % index)
+            raise RuntimeError("总楼层不是数字")
 
         try:
             total_area = int(content[4])
         except Exception:
-            raise RuntimeError("序号[%d] 总面积不是数字" % index)
+            raise RuntimeError("总面积不是数字")
 
         try:
             rent_money = int(content[5])
         except Exception:
-            raise RuntimeError("序号[%d] 租金不是数字" % index)
+            raise RuntimeError("租金不是数字")
 
     except Exception as e:
-        print("表格[%s] %s 该条数据已经忽略"%(sheetname, str(e)))
+        vld_err("表格[%s] 序号[%s] %s 该条数据已经忽略"%(sheetname, str(index), str(e)))
         return None
 
     else:
@@ -79,7 +83,7 @@ class HouseListReader(XlsxReader):
             if single_dict(title)[1] == houseinfo_sheet_comfirm_list:
                 self.comfirm_sheet.append(single_dict(title)[0])
             else:
-                print("表格[%s] 的标题不正确 该张表数据已全部忽略"%single_dict(title)[0])
+                vld_err("表格[%s] 的标题不正确 该张表数据已全部忽略"%single_dict(title)[0])
         return self.comfirm_sheet
     
     @property
