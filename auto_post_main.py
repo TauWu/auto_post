@@ -40,8 +40,7 @@ if __name__ == '__main__':
 
     if len(argv) == 1:
         h = HouseListReader("house_list.xlsx")
-        with open("test.log","w") as test:
-            test.writelines(str(h.vaild_data))
+        h.vaild_data
 
 
     if len(argv) == 2:
