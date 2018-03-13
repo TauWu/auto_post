@@ -36,7 +36,7 @@ class XlsxReader():
 
     def get_sheet_data(self, sheetname):
         '''获取某一张表的所有内容'''
-        for idx in range(2, self.max_row(sheetname)):
+        for idx in range(2, self.max_row(sheetname)+1):
             yield [content.value for content in self.get_sheet_content(sheetname)[idx]]
     
     def get_sheet_contents(self, sheetname):
