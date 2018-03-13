@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # 自动发帖主程序
 
+from sys import argv
+
 from module.database.user import User
+from module.xlsx.house_list_reader import HouseListReader
 from util.common.logger import base_info, base_err
 from constant.dict import *
-from sys import argv
 
 def user_cmd(opt_id):
     user = User()
@@ -35,6 +37,13 @@ def user_cmd(opt_id):
         user.close
 
 if __name__ == '__main__':
+
+    if len(argv) == 1:
+        h = HouseListReader("house_list.xlsx")
+        with open("test.log","w") as test:
+            test.writelines(str(h.vaild_data))
+
+
     if len(argv) == 2:
         '''带参数的执行程序'''
         if argv[1].strip() == "user":
