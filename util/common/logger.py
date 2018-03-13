@@ -60,11 +60,3 @@ def use_logger(level):
         return _func
         
     return decorator
-
-@use_logger(level="info")
-def base_info(msg):
-    pass
-
-@use_logger(level="err")
-def base_err(msg):
-    pass

@@ -5,7 +5,7 @@ from sys import argv
 
 from module.database.user import User
 from module.database.house_info import HouseInfoXlsx
-from util.common.logger import base_info, base_err
+from constant.logger import unknown, base_info, base_err, base_fatal
 from constant.dict import *
 
 def user_cmd(opt_id):
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     if len(argv) == 2:
         '''带参数的执行程序'''
         if argv[1].strip() == "user":
+            '''用户信息维护操作'''
             while True:
                 opt_id = int(input("请输入需要进行的用户操作：\n【0】退出程序\n【1】新增用户\n【2】修改用户\n【3】查看用户\n\n"))
                 if opt_id > 0 and opt_id <= 3:
@@ -55,3 +56,15 @@ if __name__ == '__main__':
                 else:
                     print("没有这个操作【%d】"%opt_id)
                     pass
+        
+        elif argv[1].strip() == "export":
+            '''数据导入操作'''
+            try:
+                x = HouseInfoXlsx("house_list.xlsx")
+                x.insert_data
+            except FileNotFoundError:
+                base_fatal("没有找到该文件！请检查！")
+                raise
+            except Exception:
+                unknown(Exception)
+                raise

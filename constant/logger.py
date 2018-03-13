@@ -15,3 +15,19 @@ def db_fatal(msg):
 @use_logger(level="err")
 def vld_err(msg):
     pass
+
+@use_logger(level="fatal")
+def unknown(msg):
+    pass
+
+@use_logger(level="info")
+def base_info(msg):
+    pass
+
+@use_logger(level="err")
+def base_err(msg):
+    pass
+
+@use_logger(level="fatal")
+def base_fatal(msg):
+    pass
