@@ -35,3 +35,19 @@ def base_err(msg):
 @use_logger(level="fatal")
 def base_fatal(msg):
     pass
+
+@use_logger(level="info")
+def sele_info(msg):
+    pass
+
+@use_logger(level="warn")
+def sele_warn(msg):
+    pass
+
+@use_logger(level="err")
+def sele_err(msg):
+    pass
+
+@use_logger(level="fatal")
+def sele_fatal(msg):
+    pass

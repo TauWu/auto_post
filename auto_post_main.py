@@ -6,6 +6,8 @@ from sys import argv
 
 from module.database.user import User
 from module.database.house_info import HouseInfoXlsx
+from module.sele.page_login import PageLogin
+
 from constant.logger import unknown, base_info, base_warn, base_err, base_fatal
 from constant.dict import *
 
@@ -48,6 +50,8 @@ def login_cmd(username):
         user_cmd(1, username)
     else:
         base_info("用户[%s]开始尝试登录..."%username)
+        login = PageLogin(username)
+        login.login
 
 if __name__ == '__main__':
 
