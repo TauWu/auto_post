@@ -57,7 +57,7 @@ if __name__ == '__main__':
                     print("没有这个操作【%d】"%opt_id)
                     pass
         
-        elif argv[1].strip() == "export":
+        elif argv[1].strip() == "import":
             '''数据导入操作'''
             try:
                 x = HouseInfoXlsx("house_list.xlsx")
