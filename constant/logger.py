@@ -24,6 +24,10 @@ def unknown(msg):
 def base_info(msg):
     pass
 
+@use_logger(level="warn")
+def base_warn(msg):
+    pass
+
 @use_logger(level="err")
 def base_err(msg):
     pass

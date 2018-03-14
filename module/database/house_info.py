@@ -17,7 +17,7 @@ class HouseInfo(DBController):
         try:
             self.execute(sql_execute)
         except Exception as e:
-            db_err("向房源表中插入一条数据失败！e:%s, SQL: %s"%(str(e),sql_execute.replace('\n','')))
+            db_err("向房源表中插入一条数据失败！e:%s, SQL: %s"%(str(e),sql_execute))
 
     @property
     def truncate_house_info(self):
@@ -26,7 +26,7 @@ class HouseInfo(DBController):
         try:
             self.execute(sql_execute)
         except Exception as e:
-            db_fatal("清空数据表失败！e:%s, SQL: %s"%(str(e),sql_execute.replace('\n','')))
+            db_fatal("清空数据表失败！e:%s, SQL: %s"%(str(e),sql_execute))
             raise e
 
 class HouseInfoXlsx(HouseInfo, HouseListReader):

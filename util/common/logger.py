@@ -44,17 +44,17 @@ def use_logger(level):
         logger = log_base(func.__name__)
         def _func(*args, **kwargs):
             '''使用本装饰器的函数要求为日志输出函数 同时要求函数的第一个参数是需要输出的日志'''
-            
+            msg = args[0].replace('\n', ' ')
             if level == "info":
-                logger.info(args[0])
+                logger.info(msg)
             elif level == "debug":
-                logger.debug(args[0])
+                logger.debug(msg)
             elif level == "warn":
-                logger.warning(args[0])
+                logger.warning(msg)
             elif level == "err":
-                logger.err(args[0])
+                logger.err(msg)
             elif level == "fatal":
-                logger.fatal(args[0])
+                logger.fatal(msg)
             return func(*args)
 
         return _func

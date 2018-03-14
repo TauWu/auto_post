@@ -32,7 +32,7 @@ class User(DBController):
         try:
             self.execute(sql_execute)
         except Exception as e:
-            db_err("向用户表中插入一条数据失败！ e:%s, SQL: %s"%(str(e),sql_execute.replace('\n','')))
+            db_err("向用户表中插入一条数据失败！ e:%s, SQL: %s"%(str(e),sql_execute))
 
     def user_exist(self, username):
         '''查询某一用户在数据表中是否存在 返回布尔值'''
@@ -51,8 +51,20 @@ class User(DBController):
 
         try:
             self.execute(sql_execute)
-        except Exception as e:
+        except Exception:
             db_err("修改用户表中【{username}】信息错误！".format(user_name=username))
+
+    @property
+    def all_users(self):
+        '''查询当前数据表中所有的用户列表'''
+        sql_execute = "select username from auto_post_users"
+
+        try:
+            self.execute(sql_execute)
+            usernames = self.cur.fetchall()
+        except Exception:
+            db_err("查询用户表中所有用户列表失败！")
+        return usernames
 
     @property
     def close(self):
