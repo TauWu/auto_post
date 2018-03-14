@@ -8,9 +8,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from ..database.user import User
-import os
+from contextlib import contextmanager
+import re
+
 
 __all__ = [
     'webdriver', 'keys', 'ActionChains', 'By',
-    'WebDriverWait', 'EC', 'time', 'User', 'os'
+    'WebDriverWait', 'EC', 'time', 'User',
+    'contextmanager', "re"
     ]

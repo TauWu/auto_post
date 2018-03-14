@@ -6,7 +6,7 @@ from sys import argv
 
 from module.database.user import User
 from module.database.house_info import HouseInfoXlsx
-from module.sele.page_login import PageLogin
+from module.sele.send_house import SendHouse
 
 from constant.logger import unknown, base_info, base_warn, base_err, base_fatal
 from constant.dict import *
@@ -41,7 +41,7 @@ def user_cmd(opt_id, username=""):
     finally:
         user.close
 
-def login_cmd(username):
+def send_cmd(username):
     '''登录操作命令'''
     user = User()
     is_exist = user.user_exist(username)
@@ -50,14 +50,17 @@ def login_cmd(username):
         user_cmd(1, username)
     else:
         base_info("用户[%s]开始尝试登录..."%username)
-        login = PageLogin(username)
-        login.login
+        sender = SendHouse(username, [['总门店', 1, '新城枫景', '6', '13', '19', '800', '【图片实拍 月付】精装修 紧靠地铁站 品牌家电拎包入住']])
+        fact = sender.send
+        for f in fact:
+            print(f)
+            a = input("DEBUG")
 
 if __name__ == '__main__':
 
     if len(argv) == 1:
         username = input("请输入需要登录的用户名\n")
-        login_cmd(username)
+        send_cmd(username)
 
 
     if len(argv) == 2:
@@ -90,7 +93,7 @@ if __name__ == '__main__':
                 unknown(Exception)
                 raise
         
-        elif argv[1].strip() == "login":
-            '''登录操作'''
+        elif argv[1].strip() == "send":
+            '''发送操作'''
             username = input("请输入需要登录的用户名\n")
-            login_cmd(username)
+            send_cmd(username)
