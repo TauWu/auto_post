@@ -3,3 +3,4 @@ config.py
 *.pyc
 .vscode/
 *.xlsx
+test/
