@@ -50,7 +50,7 @@ def send_cmd(username):
         user_cmd(1, username)
     else:
         base_info("用户[%s]开始尝试登录..."%username)
-        sender = SendHouse(username, [['总门店', 1, '新城枫景', '6', '13', '19', '800', '【图片实拍 月付】精装修 紧靠地铁站 品牌家电拎包入住']])
+        sender = SendHouse(username, [['总门店', 1, '新城枫景', '6', '13', '19', '800', '【图片实拍 月付】精装修 紧靠地铁站 品牌家电拎包入住'], ['总门店', 1, '新城枫景', '6', '13', '19', '800', '【图片实拍 月付】精装修 紧靠地铁站 品牌家电拎包入住']])
         fact = sender.send
         for f in fact:
             print(f)

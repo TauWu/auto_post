@@ -3,14 +3,16 @@
 from ..sele import *
 from constant.logger import *
 from ..sele.page_login import PageLogin
+from util.common.img_loader import ImgLoader
 
-class SendHouse(PageLogin):
+class SendHouse(PageLogin, ImgLoader):
 
     def __init__(self, username, house_list=[]):
         PageLogin.__init__(self,username)
         self.browser = self.login
         self.house_list = house_list
         self.current_house_info = None
+        self.main_window = self.browser.window_handles[0]
 
     @contextmanager
     def wait_for_new_window(self, driver, timeout=20):
@@ -28,9 +30,12 @@ class SendHouse(PageLogin):
     @property
     def __send_single__(self):
         browser = self.browser
-        self.__to_send_page__               # 跳转到发布页面
-        self.__choose_platform__            # 弹出框中勾选全部发布方式
-        self.__send_info__                  # 将有关的数据发送到网页前端
+        self.__to_send_page__                       # 跳转到发布页面
+        self.__choose_platform__                    # 弹出框中勾选全部发布方式
+        self.__send_info__                          # 将有关的数据发送到网页前端
+        browser.close()                             # 关闭当前窗口
+        browser.switch_to_window(self.main_window)  # 切换回主窗口
+        self.browser = browser
         return True
 
     @property
@@ -82,13 +87,16 @@ class SendHouse(PageLogin):
     @property
     def __send_info__(self):
         '''通过给出的数据填写表单'''
-        house_info = (sheet, idx, community, floor_num, total_floor, area, price, title) = self.__get_info__   #解析房源数据
-
-        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title)))
+        house_info = (sheet, idx, community, floor_num, total_floor, area, price, title) = self.__get_info__    #解析房源数据
+        
+        img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                       #房源图片解析
+        house_imgs = img.room_imgs
+        self.check_title(title)                                                                                 #检查标题是否有非法关键词
 
         hz_entire = True
         browser = self.browser
-        self.check_title(title)                                                             #检查标题是否有非法关键词
+
+        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title)))
 
         ##############START##############
 
@@ -233,10 +241,38 @@ class SendHouse(PageLogin):
 
         browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
+        # 上传房源图片
+        # 每次完一张图片，要等待上传框再次显示才能传下一张
+        # 因为网络延迟和DOM加载需要时间
+        room_img_count=0
+        for img in house_imgs[:-1]:
+            room_image = browser.find_element_by_id("room_fileupload")
+            room_image.send_keys(img)
+            time.sleep(1)
+            room_img_count+=1
+            while 1:
+                boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
+                upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
+                if upload_box_length == room_img_count:
+                    break
+                # TODO: 当等待超过10秒，说明上传过程出现错误，例如图片参数不对
+                time.sleep(1)
 
+        # 上传户型图图片
+        house_type_image = browser.find_element_by_css_selector("#model-fileupload")
+        house_type_image.send_keys(house_imgs[-1])
+        time.sleep(1)
+
+        # 点击提交按钮
+        publish_rent_add = browser.find_element_by_id("publish-rent-add")
+        publish_rent_add.click()
+        while 1:
+           push_status = browser.find_element_by_css_selector(".result-title")
+           if u'发布成功' in push_status.text:
+               break
+           time.sleep(1)
+        
         ###############END###############
-
-
 
     @property
     def __get_info__(self):
