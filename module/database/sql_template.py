@@ -33,3 +33,12 @@ insert into
 values
     ('%s', %s, '%s', %s, %s, '%s', %s, %s, '%s')
 '''
+
+house_search_sql = '''
+select
+    sheet, idx, community, floor, total_floor, area, price, title
+from
+    auto_post_house_info
+%s
+%s
+'''

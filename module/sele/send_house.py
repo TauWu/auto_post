@@ -34,14 +34,15 @@ class SendHouse(PageLogin, ImgLoader):
             self.__to_send_page__                       # 跳转到发布页面
             self.__choose_platform__                    # 弹出框中勾选全部发布方式
             self.__send_info__                          # 将有关的数据发送到网页前端
+            a = input("DEBUG")
             browser.close()                             # 关闭当前窗口
-        except Exception:
-            sele_err("系统错误：房源推送失败！ %s"%(str(self.current_house_info)))
+        except Exception as e:
+            sele_err("系统错误：房源推送失败！ 基础信息：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
             return False
         finally:
             browser.switch_to_window(self.main_window)  # 切换回主窗口
-            self.browser = browser
-        sele_info("房源发送成功！ %s"%(str(self.current_house_info)))
+            self.browser = browser                      # 赋值类中的browser对象
+        sele_info("系统提示：房源发送成功！ 基础信息：%s"%(str(self.current_house_info[0:2])))
         return True
 
     @property
