@@ -202,11 +202,11 @@ class SendHouse(PageLogin):
         rentprice = browser.find_element_by_name("rentprice")
         rentprice.send_keys(price)
 
-        # 填写付款方式: 付1押1
+        # 填写付款方式: 面议
         paytype = browser.find_element_by_css_selector("#select-paymode > div:nth-child(2) > div:nth-child(1) > span:nth-child(1)")
         paytype.click()
-        fu1ya1 = browser.find_element_by_css_selector(".exia-light > ul:nth-child(2) > li:nth-child(2)")
-        fu1ya1.click()
+        mianyi = browser.find_element_by_css_selector(".exia-light > ul:nth-child(2) > li:nth-child(8)")
+        mianyi.click()
 
         # 选择无中介费
         noCommission = browser.find_element_by_name("noCommission")

@@ -54,7 +54,6 @@ def send_cmd(username):
         fact = sender.send
         for f in fact:
             print(f)
-            a = input("DEBUG")
 
 if __name__ == '__main__':
 
