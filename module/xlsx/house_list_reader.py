@@ -22,6 +22,8 @@ def vaild_content(sheetname, index, content):
             raise RuntimeError("楼层信息有误")
         full_address = content[2].strip()
         house_title = content[7].strip()
+        house_type = int(content[3].strip()[0])
+        store = content[8].strip()
 
         if len(community_name) == 0:
             raise RuntimeError("小区名称为空")
@@ -63,7 +65,8 @@ def vaild_content(sheetname, index, content):
 
     else:
         return sheetname, index, community_name, current_floor,\
-        total_floor, full_address, total_area, rent_money, house_title
+        total_floor, full_address, total_area, rent_money, house_title,\
+        house_type, store
         
     
 

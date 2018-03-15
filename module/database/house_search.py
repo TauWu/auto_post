@@ -4,7 +4,7 @@ from constant.logger import db_err, db_fatal
 
 class HouseSearch(DBController):
 
-    def __init__(self, store, size=20, housetype="1", source=1):
+    def __init__(self, store, size=20, housetype=1, source=1):
         DBController.__init__(self)
         self.store = store                  # 所属门店
         self.size  = size                   # 推送条数
@@ -19,7 +19,7 @@ class HouseSearch(DBController):
         
         limit_str = "limit %d"%(5*self.size)    # 从最多五倍size的数据里面抽取size数量的房源
         where_str = "where %s"                  # 筛选条件
-        where_str = "store = '%s' and housetype = '%s/1/1' and source = %d"%(self.store, self.housetype, self.source)
+        where_str = "store = '%s' and housetype = %d and source = %d"%(self.store, self.housetype, self.source)
         
         execute_sql = house_search_sql%(where_str, limit_str)
 
@@ -28,3 +28,4 @@ class HouseSearch(DBController):
         except Exception as e:
             db_fatal("搜索房源错误！")
             raise
+        return self.cur.fetchall()
