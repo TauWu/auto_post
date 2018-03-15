@@ -30,12 +30,18 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __send_single__(self):
         browser = self.browser
-        self.__to_send_page__                       # 跳转到发布页面
-        self.__choose_platform__                    # 弹出框中勾选全部发布方式
-        self.__send_info__                          # 将有关的数据发送到网页前端
-        browser.close()                             # 关闭当前窗口
-        browser.switch_to_window(self.main_window)  # 切换回主窗口
-        self.browser = browser
+        try:
+            self.__to_send_page__                       # 跳转到发布页面
+            self.__choose_platform__                    # 弹出框中勾选全部发布方式
+            self.__send_info__                          # 将有关的数据发送到网页前端
+            browser.close()                             # 关闭当前窗口
+        except Exception:
+            sele_err("系统错误：房源推送失败！ %s"%(str(self.current_house_info)))
+            return False
+        finally:
+            browser.switch_to_window(self.main_window)  # 切换回主窗口
+            self.browser = browser
+        sele_info("房源发送成功！ %s"%(str(self.current_house_info)))
         return True
 
     @property
