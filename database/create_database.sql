@@ -24,9 +24,12 @@ CREATE TABLE `auto_post_house_info` (
   `floor` int NOT NULL COMMENT '楼层',
   `total_floor` int NOT NULL COMMENT '总楼层',
   `addr` varchar(127) NOT NULL COMMENT '商圈地址',
+  `house_type` int NOT NULL DEFAULT 1 COMMENT '户型（几室）',
   `area` int NOT NULL COMMENT '房间面积',
   `price` int NOT NULL COMMENT '房间租金',
   `title` varchar(127) NOT NULL COMMENT '房源标题',
+  `store` varchar(31) NOT NULL COMMENT '所属门店',
+  `source` int NOT NULL DEFAULT 1 COMMENT '房源来源（1-推广房源 2-本地房源）'
   
   `deleted` int NOT NULL DEFAULT 0 COMMENT '删除标记',
   `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
