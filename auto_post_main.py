@@ -104,7 +104,7 @@ if __name__ == '__main__':
         elif argv[1].strip() == "import":
             '''数据导入操作'''
             try:
-                x = HouseInfoXlsx("house_list.xlsx")
+                x = HouseInfoXlsx("/data/pics/house_list.xlsx")
                 x.insert_data
             except FileNotFoundError:
                 base_fatal("没有找到该文件！请检查！")
