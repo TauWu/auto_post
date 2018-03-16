@@ -18,7 +18,6 @@ class SendHouse(PageLogin, ImgLoader):
     def wait_for_new_window(self, driver, timeout=20):
         handles_before = driver.window_handles
         yield
-        sele_info("打开发布窗口成功！")
         WebDriverWait(driver, timeout).until(lambda driver: len(handles_before) != len(driver.window_handles))
 
     @property
@@ -42,6 +41,7 @@ class SendHouse(PageLogin, ImgLoader):
             self.__to_send_page__                       # 跳转到发布页面
             self.__choose_platform__                    # 弹出框中勾选全部发布方式
             self.__send_info__                          # 将有关的数据发送到网页前端
+            self.__check_result__                       # 检查发送结果是否正常
         except Exception as e:
             sele_err("系统错误：房源推送失败！ 房源编号：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
             return False
@@ -318,3 +318,13 @@ class SendHouse(PageLogin, ImgLoader):
             for kw in kws:
                 house_title = title.replace(kw,"**")
             sele_warn("检查出错误 房间标题修改为：%s"%house_title)
+
+    @property
+    def __check_result__(self):
+        time.sleep(2)
+        url = self.browser.current_url.strip()
+        if url.find("code=101") != -1:
+            '''操作成功'''
+            pass
+        else:
+            raise RuntimeError("上传操作因第三方原因失败！")
