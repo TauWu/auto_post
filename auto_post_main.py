@@ -75,15 +75,13 @@ def send_cmd(username):
                 send_count = send_count + 1
             if send_count >= size:
                 break
-                
+
         base_info("房源发送结束！共发布成功[%d]套房源"%send_count)
 
 if __name__ == '__main__':
 
     if len(argv) == 1:
-        username = input("请输入需要登录的用户名\n")
-        send_cmd(username)
-
+        base_warn("请携带参数 user/import/send")
 
     if len(argv) == 2:
         '''带参数的执行程序'''

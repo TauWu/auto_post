@@ -31,6 +31,13 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __send_single__(self):
         browser = self.browser
+        
+        try:
+            self.__check__                              # 发布预检查
+        except Exception as e:
+            sele_err("系统错误：房源推送失败！ 房源编号：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
+            return False
+            
         try:
             self.__to_send_page__                       # 跳转到发布页面
             self.__choose_platform__                    # 弹出框中勾选全部发布方式
@@ -92,17 +99,26 @@ class SendHouse(PageLogin, ImgLoader):
         self.browser = browser
 
     @property
+    def __check__(self):
+        '''预检查模块'''
+        (sheet, idx, community, floor_num, total_floor, area, price, title, house_type) = self.__get_info__
+        
+        # 检查房源图片
+        try:
+            img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))
+        except Exception:
+            raise
+
+    @property
     def __send_info__(self):
         '''通过给出的数据填写表单'''
         house_info = (sheet, idx, community, floor_num, total_floor, area, price, title, house_type) = self.__get_info__    #解析房源数据
 
         sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title, house_type)))
 
-        try:
-            img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
-        except Exception:
-            raise
+        img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
         house_imgs = img.room_imgs
+
         self.check_title(title)                                                                                 #检查标题是否有非法关键词
 
         hz_entire = True
