@@ -10,7 +10,7 @@ class HouseSearch(DBController):
         self.size  = size                   # 推送条数
         self.source = source                # 房源来源（1-推广 2-本地）
         self.housetype = housetype          # 房型
-        self.house_list = list()            # 搜索结果（size的两倍）
+        self.house_list = list()            # 搜索结果（size的5倍）
         self.__search_house_list__          # 执行搜索操作
     
     @property
@@ -36,4 +36,4 @@ class HouseSearch(DBController):
         if len(db_rtn) <= 2*self.size:
             self.house_list = db_rtn
         else:
-            self.house_list = sample(db_rtn, 2*self.size)
+            self.house_list = sample(db_rtn, 5*self.size)   # 打乱顺序发布
