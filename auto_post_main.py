@@ -50,6 +50,7 @@ def send_cmd(username):
         base_warn("没有找到用户名为[%s]的用户，继续操作将为您新增此用户..."%username)
         user_cmd(1, username)
     else:
+        #TODO 在这里插入循环提问 用户会发起重合的房源请求 计划使用多进程执行发送服务
         while True:
             store = input("请输入需要推广的门店名称")
             try:
