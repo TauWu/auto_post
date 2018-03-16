@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "本机的IP地址是："
+ifconfig -a | grep inet | grep -v 127 | grep -v inet6 | awk '{print $2}'
+
+# 删除使用Mac传递文件产生的不必要的文件
+find /data/imgs -name *DS_Store* -print -type f -exec sudo rm -rf {} \; > /dev/null
+find /data/imgs -name *._* -print -type f -exec sudo rm -rf {} \; > /dev/null
+
+echo "请在下面输入密码：123123（直接输入密码然后按ENTER，输入密码过程中没有显示）"
+sudo chmod 777 -R /data/imgs
+
+cd /data/code/auto_post && ./auto_post_main.py send

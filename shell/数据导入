@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cd /data/code/auto_post && ./auto_post_main.py import

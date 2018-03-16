@@ -88,6 +88,7 @@ if __name__ == '__main__':
 
         if argv[1].strip() == "user":
             '''用户信息维护操作'''
+            base_info("开始用户信息维护操作")
             while True:
                 opt_id = int(input("请输入需要进行的用户操作：\n【0】退出程序\n【1】新增用户\n【2】修改用户\n【3】查看用户\n【4】查询所有用户名\n"))
                 if opt_id > 0 and opt_id <= 3:
@@ -96,6 +97,7 @@ if __name__ == '__main__':
                 elif opt_id == 4:
                     user_cmd(opt_id)
                 elif opt_id == 0:
+                    base_info("用户信息维护程序退出...")
                     break
                 else:
                     base_warn("没有这个操作【%d】"%opt_id)
@@ -104,14 +106,14 @@ if __name__ == '__main__':
         elif argv[1].strip() == "import":
             '''数据导入操作'''
             try:
+                base_info("开始数据导入操作")
                 x = HouseInfoXlsx("/data/pics/house_list.xlsx")
                 x.insert_data
             except FileNotFoundError:
                 base_fatal("没有找到该文件！请检查！")
-                raise
             except Exception:
+                base_fatal(str(Exception))
                 unknown(Exception)
-                raise
         
         elif argv[1].strip() == "send":
             '''发送操作'''
