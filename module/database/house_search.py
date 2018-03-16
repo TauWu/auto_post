@@ -30,10 +30,6 @@ class HouseSearch(DBController):
             raise
         
         db_rtn = [list(house_info) for house_info in self.cur.fetchall()]
-
         db_info("本次发布筛选共查询到%d条数据 等待发布..."%len(db_rtn))
 
-        if len(db_rtn) <= 2*self.size:
-            self.house_list = db_rtn
-        else:
-            self.house_list = sample(db_rtn, 5*self.size)   # 打乱顺序发布
+        self.house_list = sample(db_rtn, len(db_rtn))   # 打乱顺序发布
