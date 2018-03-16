@@ -95,7 +95,9 @@ class SendHouse(PageLogin, ImgLoader):
     def __send_info__(self):
         '''通过给出的数据填写表单'''
         house_info = (sheet, idx, community, floor_num, total_floor, area, price, title, house_type) = self.__get_info__    #解析房源数据
-        
+
+        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title, house_type)))
+
         try:
             img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
         except Exception:
@@ -105,8 +107,6 @@ class SendHouse(PageLogin, ImgLoader):
 
         hz_entire = True
         browser = self.browser
-
-        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title, house_type)))
 
         ##############START##############
 
