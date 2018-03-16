@@ -64,11 +64,19 @@ def send_cmd(username):
                 break
         base_info("筛选房源中...")
         hs = HouseSearch(store, size, housetype, source).house_list
+
         base_info("用户[%s]开始尝试登录..."%username)
         sender = SendHouse(username, hs)
-        fact = sender.send
-        for f in fact:
-            print(f)
+        send_house = sender.send
+        send_count = 0
+        
+        for send in send_house:
+            if send:
+                send_count = send_count + 1
+            if send_count >= size:
+                break
+                
+        base_info("房源发送结束！共发布成功[%d]套房源"%send_count)
 
 if __name__ == '__main__':
 
