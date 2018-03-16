@@ -36,8 +36,9 @@ values
 
 house_search_sql = '''
 select
-    sheet, idx, community, floor, total_floor, area, price,
-    title, house_type, store
+    sheet, idx, community, concat(floor), 
+    concat(total_floor), concat(area), concat(price),
+    title, concat(house_type)
 from
     auto_post_house_info
 %s

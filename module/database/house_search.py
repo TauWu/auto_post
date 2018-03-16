@@ -18,8 +18,7 @@ class HouseSearch(DBController):
         from .sql_template import house_search_sql
         
         limit_str = "limit %d"%(5*self.size)    # 从最多五倍size的数据里面抽取size数量的房源
-        where_str = "where %s"                  # 筛选条件
-        where_str = "store = '%s' and housetype = %d and source = %d"%(self.store, self.housetype, self.source)
+        where_str = "where store = '%s' and house_type = %d and source = %d"%(self.store, self.housetype, self.source)
         
         execute_sql = house_search_sql%(where_str, limit_str)
 
@@ -28,4 +27,4 @@ class HouseSearch(DBController):
         except Exception as e:
             db_fatal("搜索房源错误！")
             raise
-        return self.cur.fetchall()
+        self.house_list = [list(house_info) for house_info in self.cur.fetchall()]

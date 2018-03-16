@@ -7,6 +7,7 @@ from sys import argv
 from module.database.user import User
 from module.database.house_info import HouseInfoXlsx
 from module.sele.send_house import SendHouse
+from module.database.house_search import HouseSearch
 
 from constant.logger import unknown, base_info, base_warn, base_err, base_fatal
 from constant.dict import *
@@ -49,8 +50,22 @@ def send_cmd(username):
         base_warn("没有找到用户名为[%s]的用户，继续操作将为您新增此用户..."%username)
         user_cmd(1, username)
     else:
+        while True:
+            store = input("请输入需要推广的门店名称")
+            try:
+                size = int(input("请输入需要推广的数量"))
+                housetype = int(input("请输入房源类型（几室）"))
+                source = int(input("请输入房源来源（1-推广 2-本地）"))
+                if source not in [1, 2]:
+                    raise ValueError("类型错误！")
+            except Exception:
+                base_warn("推广数量、房源类型、房源来源请输入数字！")
+            else:
+                break
+        base_info("筛选房源中...")
+        hs = HouseSearch(store, size, housetype, source).house_list
         base_info("用户[%s]开始尝试登录..."%username)
-        sender = SendHouse(username, [['总门店', 1, '新城枫景', '6', '13', '19', '800', '【图片实拍 月付】精装修 紧靠地铁站 品牌家电拎包入住'], ['总门店', 1, '新城枫景', '6', '13', '19', '800', '【图片实拍 月付】精装修 紧靠地铁站 品牌家电拎包入住']])
+        sender = SendHouse(username, hs)
         fact = sender.send
         for f in fact:
             print(f)

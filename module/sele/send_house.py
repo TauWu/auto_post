@@ -25,7 +25,8 @@ class SendHouse(PageLogin, ImgLoader):
     def send(self):
         for house_info in self.house_list:
             self.current_house_info = house_info
-            yield self.__send_single__
+            yield self.__send_single__                  # 将单条发送的结果返回给main函数
+        self.browser.close()                            # 运行结束关闭主窗口
     
     @property
     def __send_single__(self):
@@ -34,15 +35,14 @@ class SendHouse(PageLogin, ImgLoader):
             self.__to_send_page__                       # 跳转到发布页面
             self.__choose_platform__                    # 弹出框中勾选全部发布方式
             self.__send_info__                          # 将有关的数据发送到网页前端
-            a = input("DEBUG")
-            browser.close()                             # 关闭当前窗口
         except Exception as e:
-            sele_err("系统错误：房源推送失败！ 基础信息：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
+            sele_err("系统错误：房源推送失败！ 房源编号：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
             return False
         finally:
+            browser.close()                             # 关闭当前窗口
             browser.switch_to_window(self.main_window)  # 切换回主窗口
             self.browser = browser                      # 赋值类中的browser对象
-        sele_info("系统提示：房源发送成功！ 基础信息：%s"%(str(self.current_house_info[0:2])))
+        sele_info("系统提示：房源发送成功！ 房源编号：%s"%(str(self.current_house_info[0:2])))
         return True
 
     @property
@@ -94,16 +94,19 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __send_info__(self):
         '''通过给出的数据填写表单'''
-        house_info = (sheet, idx, community, floor_num, total_floor, area, price, title) = self.__get_info__    #解析房源数据
+        house_info = (sheet, idx, community, floor_num, total_floor, area, price, title, house_type) = self.__get_info__    #解析房源数据
         
-        img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                       #房源图片解析
+        try:
+            img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
+        except Exception:
+            raise
         house_imgs = img.room_imgs
         self.check_title(title)                                                                                 #检查标题是否有非法关键词
 
         hz_entire = True
         browser = self.browser
 
-        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title)))
+        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title, house_type)))
 
         ##############START##############
 
@@ -128,9 +131,9 @@ class SendHouse(PageLogin, ImgLoader):
         community_es.click()
 
         # 输入户型
-        # 室：1
+        # 室：自定义
         room = browser.find_element_by_name("room")
-        room.send_keys(1)
+        room.send_keys(house_type)
 
         # 厅：1
         hall = browser.find_element_by_name("hall")

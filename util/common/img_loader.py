@@ -21,8 +21,14 @@ class ImgLoader():
         for root, dirs, files in os.walk(self.path):
             for file in files:
                 room_imgs_unsorted.append(os.path.abspath(os.path.join(os.getcwd(), root, file)))
-        
+
+        if len(room_imgs_unsorted) == 0:
+            raise RuntimeError("图片仓库中没有对应的图片文件，请检查！")
+
         # 按照 封面图 - 1..6 - 户型图 的顺序对图片列表进行排序
+        room_cover_image = str()
+        house_type_image = str()
+
         for img in room_imgs_unsorted:
             if os.path.basename(img).startswith(u"封面图"):
                 room_cover_image = img
@@ -31,6 +37,9 @@ class ImgLoader():
                 house_type_image = img
                 continue
             self.room_imgs.append(img)
+        if len(room_cover_image) == 0 or len(room_cover_image) == 1:
+            raise RuntimeError("图片仓库中没有对应的封面图和户型图")
+            
         self.room_imgs.insert(len(self.room_imgs), house_type_image)
         self.room_imgs.insert(0, room_cover_image)
 
