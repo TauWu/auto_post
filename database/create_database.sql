@@ -1,3 +1,5 @@
+CREATE DATABASE auto_post;
+
 use auto_post;
 
 -- 用户表
