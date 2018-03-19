@@ -79,6 +79,7 @@ def send_cmd(username):
         send_house_proc(hs_list, size_list, store_list)
 
 def send_house_proc(hs_list, size_list, store_list):
+    '''房源发送进程（并没有使用多进程）'''
     base_info("用户[%s]开始尝试登录..."%username)
 
     def get_hs():
@@ -115,12 +116,11 @@ if __name__ == '__main__':
 
     if len(argv) == 1:
         base_warn("请携带参数 user/import/send")
-
+    
+    # 带参数的执行程序
     if len(argv) == 2:
-        '''带参数的执行程序'''
-
+        # 用户信息维护操作
         if argv[1].strip() == "user":
-            '''用户信息维护操作'''
             base_info("开始用户信息维护操作")
             while True:
                 opt_id = int(input("请输入需要进行的用户操作：\n【0】退出程序\n【1】新增用户\n【2】修改用户\n【3】查看用户\n【4】查询所有用户名\n"))
@@ -135,9 +135,9 @@ if __name__ == '__main__':
                 else:
                     base_warn("没有这个操作【%d】"%opt_id)
                     pass
-        
+
+        # 数据导入操作
         elif argv[1].strip() == "import":
-            '''数据导入操作'''
             try:
                 base_info("开始数据导入操作")
                 x = HouseInfoXlsx("/data/pics/house_list.xlsx")
@@ -148,7 +148,7 @@ if __name__ == '__main__':
                 base_fatal(str(Exception))
                 unknown(Exception)
         
+        # 发送操作
         elif argv[1].strip() == "send":
-            '''发送操作'''
             username = input("请输入需要登录的用户名\n")
             send_cmd(username)
