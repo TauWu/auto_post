@@ -82,35 +82,18 @@ def send_house_proc(hs_list, size_list, store_list):
     '''房源发送进程（并没有使用多进程）'''
     base_info("用户[%s]开始尝试登录..."%username)
 
-    def get_hs():
-        yield from hs_list
+    for idx in range(0, len(hs_list)):
+        sender = SendHouse(username, hs_list[idx])
+        send_house = sender.send
+        send_count = 0
 
-    def get_size():
-        yield from size_list
-    
-    def get_store():
-        yield from store_list
+        for send in send_house:
+            if send:
+                send_count = send_count + 1
+            if send_count >= size_list[idx]:
+                break
 
-    hs = get_hs()
-    size = get_size()
-    store = get_store()
-
-    while True:
-        try:
-            sender = SendHouse(username, next(hs))
-            send_house = sender.send
-            send_count = 0
-
-            for send in send_house:
-                if send:
-                    send_count = send_count + 1
-                if send_count >= next(size):
-                    break
-
-            base_info("[%s]房源发送结束！共发布成功[%d]套房源"%(next(store), send_count))
-        except StopIteration:
-            base_info("上传程序运行结束！")
-            break
+        base_info("[%s]房源发送结束！共发布成功[%d]套房源"%(store_list[idx], send_count))
 
 if __name__ == '__main__':
 
