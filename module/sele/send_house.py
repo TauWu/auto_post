@@ -46,7 +46,8 @@ class SendHouse(PageLogin, ImgLoader):
             sele_err("系统错误：房源推送失败！ 房源编号：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
             return False
         finally:
-            browser.close()                             # 关闭当前窗口
+            if len(browser.window_handles) != 1:
+                browser.close()                         # 关闭当前窗口
             browser.switch_to_window(self.main_window)  # 切换回主窗口
             self.browser = browser                      # 赋值类中的browser对象
         sele_info("系统提示：房源发送成功！ 房源编号：%s"%(str(self.current_house_info[0:2])))
@@ -117,13 +118,18 @@ class SendHouse(PageLogin, ImgLoader):
 
         img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
         house_imgs = img.room_imgs
-
+        
         self.check_title(title)                                                                                 #检查标题是否有非法关键词
 
         hz_entire = True
         browser = self.browser
 
         ##############START##############
+        try:
+            clear_e = browser.find_element_by_css_selector("#formcache-refuse")
+            clear_e.click()
+        except Exception:
+            pass
 
         # 选择整租
         if hz_entire is True:
@@ -137,6 +143,7 @@ class SendHouse(PageLogin, ImgLoader):
 
         # 输入地标名称
         community_e = browser.find_element_by_xpath("""//*[@id="community_unite"]""")
+        community_e.clear()
         community_e.send_keys(addr)
         housecode.click()
         time.sleep(2)
@@ -161,22 +168,27 @@ class SendHouse(PageLogin, ImgLoader):
         # 输入户型
         # 室：自定义
         room = browser.find_element_by_name("room")
+        room.clear()
         room.send_keys(house_type)
 
         # 厅：1
         hall = browser.find_element_by_name("hall")
+        hall.clear()
         hall.send_keys(1)
 
         # 卫：1
         bathRoom = browser.find_element_by_name("bathroom")
+        bathRoom.clear()
         bathRoom.send_keys(1)
 
         # 输入当前楼层
         floor = browser.find_element_by_css_selector("div.ui-form:nth-child(10) > input:nth-child(2)")
+        floor.clear()
         floor.send_keys(floor_num)
 
         # 输入总楼层
         allFloor = browser.find_element_by_css_selector("input.ui-form-input:nth-child(5)")
+        allFloor.clear()
         allFloor.send_keys(total_floor)
 
         # 有无电梯：无
