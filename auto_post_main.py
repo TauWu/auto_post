@@ -50,34 +50,65 @@ def send_cmd(username):
         base_warn("没有找到用户名为[%s]的用户，继续操作将为您新增此用户..."%username)
         user_cmd(1, username)
     else:
-        #TODO 在这里插入循环提问 用户会发起重合的房源请求 计划使用多进程执行发送服务
+        run = True
+        hs_list = list()
+        size_list = list()
+        store_list = list()
         while True:
-            store = input("请输入需要推广的门店名称")
-            try:
-                size = int(input("请输入需要推广的数量"))
-                housetype = int(input("请输入房源类型（几室）"))
-                source = int(input("请输入房源来源（1-推广 2-本地）"))
-                if source not in [1, 2]:
-                    raise ValueError("类型错误！")
-            except Exception:
-                base_warn("推广数量、房源类型、房源来源请输入数字！")
+            while run:
+                store = input("请输入需要推广的门店名称")
+                store_list.append(store)
+                try:
+                    size = int(input("请输入需要推广的数量"))
+                    size_list.append(size)
+                    housetype = int(input("请输入房源类型（几室）"))
+                    source = int(input("请输入房源来源（1-推广 2-本地）"))
+                    if source not in [1, 2]:
+                        raise ValueError("类型错误！")
+                except Exception:
+                    base_warn("推广数量、房源类型、房源来源请输入数字！")
+                else:
+                    break
+            base_info("筛选房源中...")
+            hs_list.append(HouseSearch(store, size, housetype, source).house_list)
+            if input("是否继续添加房源？(Y/N)") == "Y":
+                run = True
             else:
+                run = False
                 break
-        base_info("筛选房源中...")
-        hs = HouseSearch(store, size, housetype, source).house_list
+        send_house_proc(hs_list, size_list, store_list)
 
-        base_info("用户[%s]开始尝试登录..."%username)
-        sender = SendHouse(username, hs)
-        send_house = sender.send
-        send_count = 0
-        
-        for send in send_house:
-            if send:
-                send_count = send_count + 1
-            if send_count >= size:
-                break
+def send_house_proc(hs_list, size_list, store_list):
+    base_info("用户[%s]开始尝试登录..."%username)
 
-        base_info("房源发送结束！共发布成功[%d]套房源"%send_count)
+    def get_hs():
+        yield from hs_list
+
+    def get_size():
+        yield from size_list
+    
+    def get_store():
+        yield from store_list
+
+    hs = get_hs()
+    size = get_size()
+    store = get_store()
+
+    while True:
+        try:
+            sender = SendHouse(username, next(hs))
+            send_house = sender.send
+            send_count = 0
+
+            for send in send_house:
+                if send:
+                    send_count = send_count + 1
+                if send_count >= next(size):
+                    break
+
+            base_info("[%s]房源发送结束！共发布成功[%d]套房源"%(next(store), send_count))
+        except StopIteration:
+            base_info("上传程序运行结束！")
 
 if __name__ == '__main__':
 
