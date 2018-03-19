@@ -101,8 +101,8 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __check__(self):
         '''预检查模块'''
-        (sheet, idx, community, floor_num, total_floor, area, price, title, house_type) = self.__get_info__
-        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s"%(community, floor_num, total_floor, area, price, title, house_type)))
+        (sheet, idx, community, addr, floor_num, total_floor, area, price, title, house_type) = self.__get_info__
+        sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s %s"%(community, addr, floor_num, total_floor, area, price, title, house_type)))
         
         # 检查房源图片
         try:
@@ -113,7 +113,7 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __send_info__(self):
         '''通过给出的数据填写表单'''
-        house_info = (sheet, idx, community, floor_num, total_floor, area, price, title, house_type) = self.__get_info__    #解析房源数据
+        house_info = (sheet, idx, community, addr, floor_num, total_floor, area, price, title, house_type) = self.__get_info__    #解析房源数据
 
         img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
         house_imgs = img.room_imgs
@@ -137,13 +137,26 @@ class SendHouse(PageLogin, ImgLoader):
 
         # 输入地标名称
         community_e = browser.find_element_by_xpath("""//*[@id="community_unite"]""")
-        community_e.send_keys(community)
+        community_e.send_keys(addr)
         housecode.click()
         time.sleep(2)
         community_e.click()
         time.sleep(2)
-        community_es = browser.find_element_by_xpath("""/html/body/div[4]/div/form/div[3]/div/ul/li""")
-        community_es.click()
+        try:
+            community_es = browser.find_element_by_xpath("""/html/body/div[4]/div/form/div[3]/div/ul/li""")
+            community_es.click()
+        except Exception:
+            community_e.clear()
+            community_e.send_keys(community)
+            housecode.click()
+            time.sleep(2)
+            community_e.click()
+            time.sleep(2)
+            try:
+                community_es = browser.find_element_by_xpath("""/html/body/div[4]/div/form/div[3]/div/ul/li""")
+                community_es.click()
+            except Exception:
+                raise RuntimeError("没有在发布平台找到对应的地标！")
 
         # 输入户型
         # 室：自定义
@@ -301,7 +314,9 @@ class SendHouse(PageLogin, ImgLoader):
 
     @property
     def __get_info__(self):
-        return tuple(self.current_house_info)
+        house_info = self.current_house_info
+        house_info[3] = house_info[3].split('/')[-1]
+        return tuple(house_info)
 
     def check_title(self, title):
         import json, requests
