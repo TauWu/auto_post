@@ -109,6 +109,7 @@ def send_house_proc(hs_list, size_list, store_list):
             base_info("[%s]房源发送结束！共发布成功[%d]套房源"%(next(store), send_count))
         except StopIteration:
             base_info("上传程序运行结束！")
+            break
 
 if __name__ == '__main__':
 
