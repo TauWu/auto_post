@@ -145,9 +145,9 @@ class SendHouse(PageLogin, ImgLoader):
         community_e.clear()
         community_e.send_keys(addr)
         housecode.click()
-        time.sleep(2)
+        time.sleep(1)
         community_e.click()
-        time.sleep(2)
+        time.sleep(1)
         try:
             community_es = browser.find_element_by_xpath("""/html/body/div[4]/div/form/div[3]/div/ul/li""")
             community_es.click()
