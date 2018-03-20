@@ -3,6 +3,7 @@
 # 自动发帖主程序
 
 from sys import argv
+from platform import system
 
 from module.database.user import User
 from module.database.house_info import HouseInfoXlsx
@@ -123,7 +124,11 @@ if __name__ == '__main__':
         elif argv[1].strip() == "import":
             try:
                 base_info("开始数据导入操作")
-                x = HouseInfoXlsx("/data/pics/house_list.xlsx")
+                base_info("自动发帖运行在系统是%s的机器上..."%system())
+                if system() == "Linux":
+                    x = HouseInfoXlsx("/data/imgs/house_list.xlsx")
+                elif system() == "Windows":
+                    x = HouseInfoXlsx(r"C:\\Users\\Administrator\\Documents\\auto_post\\house_list.xlsx")
                 x.insert_data
             except FileNotFoundError:
                 base_fatal("没有找到房源信息文件！请检查！")

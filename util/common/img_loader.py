@@ -7,7 +7,7 @@ from PIL import Image
 class ImgLoader():
     '''图片加载器'''
 
-    def __init__(self, path="/data/imgs/总门店/1"):
+    def __init__(self, path="/data/imgs/图片"):
         self.path = path
         self.room_imgs = list()     # 向外输送的图片列表
         self.__load_imgs__          # 图片初始化加载

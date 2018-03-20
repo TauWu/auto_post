@@ -102,12 +102,13 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __check__(self):
         '''预检查模块'''
+        import random
         (sheet, idx, community, addr, floor_num, total_floor, area, price, title, house_type) = self.__get_info__
         sele_info("开始发布房源 来源数据[%s - %d] 房源信息[%s]"%(sheet, idx, "%s %s %s %s %s %s %s %s"%(community, addr, floor_num, total_floor, area, price, title, house_type)))
         
         # 检查房源图片
         try:
-            img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))
+            self.img = ImgLoader("/data/imgs/图片/%d/"%(random.randint(0,99)))
         except Exception:
             raise
 
@@ -115,9 +116,7 @@ class SendHouse(PageLogin, ImgLoader):
     def __send_info__(self):
         '''通过给出的数据填写表单'''
         house_info = (sheet, idx, community, addr, floor_num, total_floor, area, price, title, house_type) = self.__get_info__    #解析房源数据
-
-        img = ImgLoader("/data/imgs/%s/%s/"%(sheet, idx))                                                               #房源图片解析
-        house_imgs = img.room_imgs
+        house_imgs = self.img.room_imgs
         
         self.check_title(title)                                                                                 #检查标题是否有非法关键词
 
