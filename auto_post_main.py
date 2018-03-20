@@ -83,8 +83,9 @@ def send_house_proc(hs_list, size_list, store_list):
     '''房源发送进程（并没有使用多进程）'''
     base_info("用户[%s]开始尝试登录..."%username)
 
+    sender_base = SendHouse(username,[],None)
     for idx in range(0, len(hs_list)):
-        sender = SendHouse(username, hs_list[idx])
+        sender = SendHouse(username, hs_list[idx], sender_base.browser)
         send_house = sender.send
         send_count = 0
 

@@ -7,9 +7,16 @@ from util.common.img_loader import ImgLoader
 
 class SendHouse(PageLogin, ImgLoader):
 
-    def __init__(self, username, house_list=[]):
-        PageLogin.__init__(self,username)
-        self.browser = self.login
+    def __init__(self, username, house_list=[], browser=None):
+        self.username = username
+        global usertype
+        if browser is not None:
+            self.browser = browser
+        else:
+            PageLogin.__init__(self, username)
+            self.browser = self.login
+            usertype = self.usertype
+        self.usertype = usertype
         self.house_list = house_list
         self.current_house_info = None
         self.main_window = self.browser.window_handles[0]
