@@ -126,10 +126,9 @@ if __name__ == '__main__':
                 x = HouseInfoXlsx("/data/pics/house_list.xlsx")
                 x.insert_data
             except FileNotFoundError:
-                base_fatal("没有找到该文件！请检查！")
+                base_fatal("没有找到房源信息文件！请检查！")
             except Exception:
-                base_fatal(str(Exception))
-                unknown(Exception)
+                unknown(str(Exception))
         
         # 发送操作
         elif argv[1].strip() == "send":
