@@ -32,8 +32,7 @@ class SendHouse(PageLogin, ImgLoader):
         for house_info in self.house_list:
             self.current_house_info = house_info
             yield self.__send_single__                  # 将单条发送的结果返回给main函数
-        self.browser.close()                            # 运行结束关闭主窗口
-    
+            
     @property
     def __send_single__(self):
         browser = self.browser
