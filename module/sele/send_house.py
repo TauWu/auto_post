@@ -350,7 +350,7 @@ class SendHouse(PageLogin, ImgLoader):
     def __check_result__(self):
         time.sleep(2)
         url = self.browser.current_url.strip()
-        if url.find("code=101") != -1:
+        if url.find("success") != -1:
             '''操作成功'''
             pass
         else:
