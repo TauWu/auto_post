@@ -34,6 +34,7 @@ git clone git@github.com:TauWu/auto_post.git
 mkdir /data/bin
 mkdir /data/imgs
 mkdir /data/docs
+mkdir /data/config
 chmod 777 -R /data
 
 # 移动 浏览器、用户配置文件、共享文件夹

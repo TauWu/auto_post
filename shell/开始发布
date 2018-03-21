@@ -10,4 +10,4 @@ find /data/imgs -name *._* -print -type f -exec sudo rm -rf {} \; > /dev/null
 echo "请在下面输入密码：123123（直接输入密码然后按ENTER，输入密码过程中没有显示）"
 sudo chmod 777 -R /data/imgs
 
-cd /data/code/auto_post && ./auto_post_main.py send
+cd /data/code/auto_post && ./auto_post_main.py
