@@ -10,6 +10,7 @@ from module.database.house_info import HouseInfoXlsx, HouseInfo
 from module.sele.send_house import SendHouse
 from module.database.house_search import HouseSearch
 from module.xlsx.house_list_finder import HouseListFinder
+from module.xlsx.config_reader import ConfigReader
 
 from constant.logger import unknown, base_info, base_warn, base_err, base_fatal
 from constant.dict import *
@@ -45,7 +46,7 @@ def user_cmd(opt_id, username=""):
         user.close
 
 def send_cmd(username):
-    '''登录操作命令'''
+    '''通过cmd发帖'''
     user = User()
     is_exist = user.user_exist(username)
     if not is_exist:
@@ -80,6 +81,22 @@ def send_cmd(username):
                 break
         send_house_proc(hs_list, size_list, store_list)
 
+def send_config(username):
+    '''通过配置文件发帖'''
+    user = User()
+    hs_list = list()
+    is_exist = user.user_exist
+    if not is_exist:
+        base_warn("没有找到用户名为[%s]的用户，继续操作将为您新增此用户..."%username)
+        user_cmd(1, username)
+    else:
+        order_reader = ConfigReader("/data/config/发帖配额.xlsx")
+        order_list = order_reader.order_list
+        for order in order_list:
+            hs_list.append(HouseSearch(order[0], order[1], order[2], order[3]).house_list)
+        send_house_proc(hs_list, order_reader.size_list, order_reader.store_list)
+        
+
 def send_house_proc(hs_list, size_list, store_list):
     '''房源发送进程（并没有使用多进程）'''
     base_info("用户[%s]开始尝试登录..."%username)
@@ -109,7 +126,8 @@ def send_house_proc(hs_list, size_list, store_list):
 if __name__ == '__main__':
 
     if len(argv) == 1:
-        base_warn("请携带参数 user/import/send")
+        username = input("请输入用户名！")
+        send_config(username)
     
     # 带参数的执行程序
     if len(argv) == 2:

@@ -60,7 +60,7 @@ class XlsxReader():
         return [y for y in self.contents]
 
 if __name__ == "__main__":
-    x = XlsxReader("../../house_list.xlsx")
+    x = XlsxReader("/data/config/发帖配额.xlsx")
     print(x.sheetnames)
     print(x.get_titles("1"))
     print(x.titles_dict)
