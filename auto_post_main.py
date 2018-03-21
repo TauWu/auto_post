@@ -6,9 +6,10 @@ from sys import argv
 from platform import system
 
 from module.database.user import User
-from module.database.house_info import HouseInfoXlsx
+from module.database.house_info import HouseInfoXlsx, HouseInfo
 from module.sele.send_house import SendHouse
 from module.database.house_search import HouseSearch
+from module.xlsx.house_list_finder import HouseListFinder
 
 from constant.logger import unknown, base_info, base_warn, base_err, base_fatal
 from constant.dict import *
@@ -132,17 +133,21 @@ if __name__ == '__main__':
         # 数据导入操作
         elif argv[1].strip() == "import":
             try:
+                clean = HouseInfo().truncate_house_info
                 base_info("开始数据导入操作")
                 base_info("自动发帖运行在系统是%s的机器上..."%system())
                 if system() == "Linux":
-                    x = HouseInfoXlsx("/data/imgs/house_list.xlsx")
+                    finder = HouseListFinder().house_file_list
+                    for find in finder:
+                        x = HouseInfoXlsx(find)
+                        x.insert_data
                 elif system() == "Windows":
                     x = HouseInfoXlsx(r"C:\\Users\\Administrator\\Documents\\auto_post\\house_list.xlsx")
-                x.insert_data
+                    x.insert_data
             except FileNotFoundError:
                 base_fatal("没有找到房源信息文件！请检查！")
-            except Exception:
-                unknown(str(Exception))
+            except Exception as e:
+                unknown(str(e))
         
         # 发送操作
         elif argv[1].strip() == "send":

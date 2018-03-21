@@ -33,7 +33,7 @@ git clone git@github.com:TauWu/auto_post.git
 # 创建程序中需要的目录
 mkdir /data/bin
 mkdir /data/imgs
-mkdir /data/imgs/图片
+mkdir /data/docs
 chmod 777 -R /data
 
 # 移动 浏览器、用户配置文件、共享文件夹

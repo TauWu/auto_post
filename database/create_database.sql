@@ -20,6 +20,7 @@ CREATE TABLE `auto_post_users` (
 -- 推广房源信息表
 CREATE TABLE `auto_post_house_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `file` varchar(20) NOT NULL COMMENT '来源数据文件名称',
   `sheet` varchar(20) NOT NULL COMMENT '来源数据表名称',
   `idx` int(11) NOT NULL COMMENT '表中编号',
   `community` varchar(50) NOT NULL COMMENT '小区名称',

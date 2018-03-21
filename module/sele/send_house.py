@@ -114,7 +114,7 @@ class SendHouse(PageLogin, ImgLoader):
         
         # 检查房源图片
         try:
-            self.img = ImgLoader("/data/imgs/图片/%d/"%(random.randint(0,99)))
+            self.img = ImgLoader("/data/imgs/%d/"%(random.randint(0,99)))
         except Exception:
             raise
 
@@ -305,7 +305,7 @@ class SendHouse(PageLogin, ImgLoader):
             room_image.send_keys(img)
             time.sleep(1)
             room_img_count+=1
-            while 1:
+            while True:
                 boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
                 upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
                 if upload_box_length == room_img_count:
@@ -321,7 +321,7 @@ class SendHouse(PageLogin, ImgLoader):
         # 点击提交按钮
         publish_rent_add = browser.find_element_by_id("publish-rent-add")
         publish_rent_add.click()
-        while 1:
+        while True:
            push_status = browser.find_element_by_css_selector(".result-title")
            if u'发布成功' in push_status.text:
                break

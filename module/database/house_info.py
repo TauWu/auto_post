@@ -34,7 +34,6 @@ class HouseInfoXlsx(HouseInfo, HouseListReader):
     def __init__(self, filename):
         HouseInfo.__init__(self)
         HouseListReader.__init__(self, filename)
-        self.truncate_house_info
         self.house_info = self.vaild_data
 
     @property

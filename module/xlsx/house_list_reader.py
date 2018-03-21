@@ -12,7 +12,7 @@ def single_dict(indict):
     else:
         return list(keys)[0], list(values)[0]
 
-def vaild_content(sheetname, index, content):
+def vaild_content(filename, sheetname, index, content):
     '''验证函数 传入一个待确认的列表list 户型和定价方式不做验证'''
     try:
         community_name = content[0]
@@ -60,13 +60,13 @@ def vaild_content(sheetname, index, content):
             raise RuntimeError("租金不是数字")
 
     except Exception as e:
-        vld_err("表格[%s] 序号[%s] %s 该条数据已经忽略"%(sheetname, str(index), str(e)))
+        vld_err("文件[%s] 表格[%s] 序号[%s] %s 该条数据已经忽略"%(filename, sheetname, str(index), str(e)))
         return None
 
     else:
-        return sheetname, index, community_name, current_floor,\
+        return (sheetname, index, community_name, current_floor,\
         total_floor, full_address, total_area, rent_money, house_title,\
-        house_type, store
+        house_type, store)
         
     
 
@@ -75,6 +75,7 @@ class HouseListReader(XlsxReader):
     def __init__(self, filename):
         XlsxReader.__init__(self, filename)
         self.filename = filename
+        self.file = self.filename.split('/')[-1][:-5]
         self.comfirm_sheet = list()
         self.comfirm_house_info = list()
 
@@ -86,7 +87,7 @@ class HouseListReader(XlsxReader):
             if single_dict(title)[1] == houseinfo_sheet_comfirm_list:
                 self.comfirm_sheet.append(single_dict(title)[0])
             else:
-                vld_err("表格[%s] 的标题不正确 该张表数据已全部忽略"%single_dict(title)[0])
+                vld_err("文件[%s] 表格[%s] 的标题不正确 该张表数据已全部忽略"%(self.file, single_dict(title)[0]))
         return self.comfirm_sheet
     
     @property
@@ -95,9 +96,11 @@ class HouseListReader(XlsxReader):
         for sheetname in self.comfirm_sheet:
             contents = self.get_sheet_contents(sheetname)
             for content in contents:
-                vaild_rtn = vaild_content(sheetname, single_dict(content)[0], single_dict(content)[1])
+                vaild_rtn = vaild_content(self.file, sheetname, single_dict(content)[0], single_dict(content)[1])
                 if vaild_rtn is not None:
-                    self.comfirm_house_info.append(vaild_rtn)
+                    vaild_rtn = list(vaild_rtn)
+                    vaild_rtn.insert(0, self.file)
+                    self.comfirm_house_info.append(tuple(vaild_rtn))
         return self.comfirm_house_info
 
     @property
