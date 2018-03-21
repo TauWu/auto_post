@@ -96,20 +96,14 @@ def send_house_proc(hs_list, size_list, store_list):
                     send_count = send_count + 1
                 if send_count >= size_list[idx]:
                     raise RuntimeError("房源发送完毕多余房源停止发送")
-                print("**********", send, idx, len(hs_list))
             except Exception:
-                print("!!!!!!!!!!", idx, len(hs_list) - 1)
                 if idx == len(hs_list) - 1:
                     base_info("所有房源发送完毕！") 
                     sender.browser.quit()
                 break
 
-
-
-
         base_info("[%s]房源发送结束！共发布成功[%d]套房源"%(store_list[idx], send_count))
 
-        
 
 if __name__ == '__main__':
 
