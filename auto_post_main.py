@@ -4,6 +4,7 @@
 
 from sys import argv
 from platform import system
+import time
 
 from module.database.user import User
 from module.database.house_info import HouseInfoXlsx, HouseInfo
@@ -100,6 +101,10 @@ def send_config(username):
 def send_house_proc(hs_list, size_list, store_list):
     '''房源发送进程（并没有使用多进程）'''
     base_info("用户[%s]开始尝试登录..."%username)
+    for size, store in zip(size_list, store_list):
+        base_info("准备发送门店[%s]的[%s]套房源"%(store, size))
+    
+    time.sleep(5)
 
     sender_base = SendHouse(username,[],None)
     for idx in range(0, len(hs_list)):
@@ -126,7 +131,7 @@ def send_house_proc(hs_list, size_list, store_list):
 if __name__ == '__main__':
 
     if len(argv) == 1:
-        username = input("请输入用户名！")
+        username = input("请输入需要登录的用户名\n")
         send_config(username)
     
     # 带参数的执行程序
