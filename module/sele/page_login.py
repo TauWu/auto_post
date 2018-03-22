@@ -13,15 +13,15 @@ class PageLogin():
 
     @property
     def login(self):
-        
-        self.__login_base__
 
         if self.usertype == 1:
             '''安居客登录'''
+            self.__login_base__("http://vip.58ganji.com/login/")
             self._login_ajk_
 
         elif self.usertype == 2:
             '''58登录'''
+            self.__login_base__("http://vip.58ganji.com/thirdparty/58")
             self._login_58_
             time.sleep(2)
             
@@ -61,8 +61,7 @@ class PageLogin():
         else:
             return 0
 
-    @property
-    def __login_base__(self):
+    def __login_base__(self, url):
         '''通过FireFox配置文件打开登录页面'''
         # FireFoxDir = "/data/bin/user.{username}".format(username=self.username)
         FireFoxDir = "/data/bin/test.user0".format(username=self.username)
@@ -70,7 +69,7 @@ class PageLogin():
             profile = webdriver.FirefoxProfile(FireFoxDir)
             profile.native_events_enabled = True
             self.browser =  webdriver.Firefox(firefox_profile=profile)
-            self.browser.get("http://vip.58ganji.com/login/")
+            self.browser.get(url)
             self.browser.maximize_window()
         except Exception as e:
             sele_fatal("浏览器打开初始网页错误！")
@@ -79,25 +78,7 @@ class PageLogin():
     @property
     def _login_58_(self):
         '''从58登录开始登录'''
-        self.__login_58_click__
         self.__login_58_sub__
-
-    @property
-    def __login_58_click__(self):
-        browser = self.browser
-        # 点击58登录按钮
-        while 1:
-            try:
-                login58 = browser.find_element_by_class_name("login-58")
-            except Exception as e:
-                sele_err("找不到登录58的按钮，刷新浏览器: %s" % e)
-                time.sleep(1)
-                continue
-            else:
-                break
-
-        login58.click()
-        self.browser = browser
 
     @property
     def __login_58_sub__(self):
