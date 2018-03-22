@@ -4,6 +4,7 @@ from ..sele import *
 from constant.logger import *
 from ..sele.page_login import PageLogin
 from util.common.img_loader import ImgLoader
+from util.common.timeout import set_timeout
 
 class SendHouse(PageLogin, ImgLoader):
 
@@ -49,6 +50,9 @@ class SendHouse(PageLogin, ImgLoader):
             self.__choose_platform__                    # 弹出框中勾选全部发布方式
             self.__send_info__                          # 将有关的数据发送到网页前端
             self.__check_result__                       # 检查发送结果是否正常
+        except SystemExit:
+            browser.close()
+            raise
         except Exception as e:
             sele_err("系统错误：房源推送失败！ 房源编号：%s， 报错信息：%s"%(str(self.current_house_info[0:2]), str(e)))
             return False
@@ -303,22 +307,18 @@ class SendHouse(PageLogin, ImgLoader):
         # 因为网络延迟和DOM加载需要时间
         room_img_count=0
         for img in house_imgs[:-1]:
-            room_image = browser.find_element_by_id("room_fileupload")
-            room_image.send_keys(img)
+            self.upload_img(img)
+            
             time.sleep(1)
             room_img_count+=1
+
             while True:
-                try:
-                    repeat_photos = browser.find_element_by_css_selector("a.ui-button-positive:nth-child(2)")
-                except Exception:
-                    boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
-                    upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
-                    if upload_box_length == room_img_count:
-                        break
-                    # TODO: 当等待超过10秒，说明上传过程出现错误，例如图片参数不对
-                    time.sleep(1)
-                else:
-                    raise RuntimeError("图片上传重复，忽略本条房源！")
+                boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
+                upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
+                if upload_box_length == room_img_count:
+                    break
+                # 当等待超过10秒，说明上传过程出现错误，例如图片参数不对
+                time.sleep(1)
 
         if self.send_ajk == True:
             # 上传户型图图片
@@ -359,17 +359,35 @@ class SendHouse(PageLogin, ImgLoader):
     @property
     def __check_result__(self):
         from urllib.parse import unquote
+        import sys
 
         time.sleep(2)
         url = self.browser.current_url.strip()
         url = unquote(url)
 
-        if url.find("发布房源+超出有效操作数") != -1:
+        if url.find("条数上限值150") != -1:
+            '''58发送条数到达上限'''
+            sele_fatal("58发送条数到达上限")
+            raise SystemExit("58发送条数到达上限")
+
+        elif url.find("发布房源+超出有效操作数") != -1:
             '''安居客发送数量达到上限'''
             self.send_ajk = False
             raise RuntimeError("安居客发送数量达到上限！")
+
         elif url.find("调用API超时") != -1:
             '''调用API超时'''
             raise RuntimeError("调用API超时！")
+
+        elif url.find("操作太频繁") != -1:
+            '''操作太频繁'''
+            raise RuntimeError("操作太频繁")
+
         else:
             pass
+    
+    @set_timeout(5)
+    def upload_img(self, img):
+        '''上传单张图片 超时时间为5秒'''
+        room_image = self.browser.find_element_by_id("room_fileupload")
+        room_image.send_keys(img)
