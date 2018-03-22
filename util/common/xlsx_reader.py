@@ -43,7 +43,8 @@ class XlsxReader():
         '''获取某一张表的所有内容'''
         sheet_data = self.get_sheet_data(sheetname)
         for data in sheet_data:
-            yield {str(data[0]):data[1:]}
+            if data[0] is not None:
+                yield {str(data[0]):data[1:]}
     
     def get_sheet_content_dict(self, sheetname):
         '''获取某一张表内容的全量字典'''

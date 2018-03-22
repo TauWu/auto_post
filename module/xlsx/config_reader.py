@@ -12,7 +12,7 @@ class ConfigReader(XlsxReader):
 
     @property
     def __read_order__(self):
-        cont_dict = self.contents_dict[0]['1']
+        cont_dict = self.contents_dict[0]['配置表']
         for i in range(1, len(cont_dict) + 1):
             self.order_list.append(cont_dict[i-1][str(i)])
     @property

@@ -28,7 +28,7 @@ git config --global user.email "$email"
 mkdir /data
 mkdir /data/code
 cd /data/code
-git clone git@github.com:TauWu/auto_post.git
+git clone https://github.com/TauWu/auto_post.git
 
 # 创建程序中需要的目录
 mkdir /data/bin
