@@ -9,6 +9,7 @@ class SendHouse(PageLogin, ImgLoader):
 
     def __init__(self, username, house_list=[], browser=None):
         self.username = username
+        self.send_ajk = True
         global usertype
         if browser is not None:
             self.browser = browser
@@ -95,7 +96,7 @@ class SendHouse(PageLogin, ImgLoader):
             raw_text = browser.page_source
             re_choose_web_1 = re.findall("""<input id=\"chooseWeb_1\".+value=\"1\"(.+)type.+""", raw_text)[0].strip()
             re_choose_web_2 = re.findall("""<input id=\"chooseWeb_2\".+value=\"2\"(.+)type.+""", raw_text)[0].strip()
-            if re_choose_web_1 == "":
+            if re_choose_web_1 == "" and self.send_ajk == True:
                 platform_anjuke = browser.find_element_by_id("chooseWeb_1")
                 platform_anjuke.click()
             if re_choose_web_2 == "":
@@ -271,11 +272,12 @@ class SendHouse(PageLogin, ImgLoader):
         mianyi = browser.find_element_by_css_selector(".exia-light > ul:nth-child(2) > li:nth-child(8)")
         mianyi.click()
 
-        # 选择无中介费
-        noCommission = browser.find_element_by_name("noCommission")
-        noCommission.click()
+        if self.send_ajk == True:
+            # 选择无中介费
+            noCommission = browser.find_element_by_name("noCommission")
+            noCommission.click()
 
-        time.sleep(1)
+            time.sleep(1)
 
         # 填写房源标题
         title_e = browser.find_element_by_name("title")
@@ -306,26 +308,29 @@ class SendHouse(PageLogin, ImgLoader):
             time.sleep(1)
             room_img_count+=1
             while True:
-                boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
-                upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
-                if upload_box_length == room_img_count:
-                    break
-                # TODO: 当等待超过10秒，说明上传过程出现错误，例如图片参数不对
-                time.sleep(1)
+                try:
+                    repeat_photos = browser.find_element_by_css_selector("a.ui-button-positive:nth-child(2)")
+                except Exception:
+                    boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
+                    upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
+                    if upload_box_length == room_img_count:
+                        break
+                    # TODO: 当等待超过10秒，说明上传过程出现错误，例如图片参数不对
+                    time.sleep(1)
+                else:
+                    raise RuntimeError("图片上传重复，忽略本条房源！")
 
-        # 上传户型图图片
-        house_type_image = browser.find_element_by_css_selector("#model-fileupload")
-        house_type_image.send_keys(house_imgs[-1])
-        time.sleep(1)
+        if self.send_ajk == True:
+            # 上传户型图图片
+            house_type_image = browser.find_element_by_css_selector("#model-fileupload")
+            house_type_image.send_keys(house_imgs[-1])
+            time.sleep(1)
 
         # 点击提交按钮
         publish_rent_add = browser.find_element_by_id("publish-rent-add")
         publish_rent_add.click()
-        while True:
-           push_status = browser.find_element_by_css_selector(".result-title")
-           if u'发布成功' in push_status.text:
-               break
-           time.sleep(1)
+        push_status = browser.find_element_by_css_selector(".result-title")
+
         
         ###############END###############
 
@@ -353,10 +358,18 @@ class SendHouse(PageLogin, ImgLoader):
 
     @property
     def __check_result__(self):
+        from urllib.parse import unquote
+
         time.sleep(2)
         url = self.browser.current_url.strip()
-        if url.find("success") != -1:
-            '''操作成功'''
-            pass
+        url = unquote(url)
+
+        if url.find("发布房源+超出有效操作数") != -1:
+            '''安居客发送数量达到上限'''
+            self.send_ajk = False
+            raise RuntimeError("安居客发送数量达到上限！")
+        elif url.find("调用API超时") != -1:
+            '''调用API超时'''
+            raise RuntimeError("调用API超时！")
         else:
-            raise RuntimeError("上传操作因第三方原因失败！")
+            pass
