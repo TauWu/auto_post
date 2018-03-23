@@ -179,3 +179,14 @@ if __name__ == '__main__':
         elif argv[1].strip() == "send":
             username = input("请输入需要登录的用户名\n")
             send_cmd(username)
+
+        # 通过配置文件发送操作
+        elif argv[1].strip() == "start":
+            username = input("请输入需要登录的用户名\n")
+            send_config(username)
+        
+    elif len(argv) == 3:
+
+        if argv[1].strip() == "start":
+            username = argv[2].strip()
+            send_config(username)

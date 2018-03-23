@@ -59,6 +59,11 @@ def vaild_content(filename, sheetname, index, content):
         except Exception:
             raise RuntimeError("租金不是数字")
 
+        try:
+            source = int(content[9])
+        except Exception:
+            raise RuntimeError("来源不是数字")
+
     except Exception as e:
         vld_err("文件[%s] 表格[%s] 序号[%s] %s 该条数据已经忽略"%(filename, sheetname, str(index), str(e)))
         return None
@@ -66,7 +71,7 @@ def vaild_content(filename, sheetname, index, content):
     else:
         return (sheetname, index, community_name, current_floor,\
         total_floor, full_address, total_area, rent_money, house_title,\
-        house_type, store)
+        house_type, store, source)
         
     
 

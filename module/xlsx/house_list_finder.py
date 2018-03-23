@@ -17,8 +17,8 @@ class HouseListFinder():
 
         for root, dirs, files in os.walk(self.path):
             for file in files:
-                if file[-4:] == "xlsx":
-                    '''只收集Excel文件'''
+                if file[-4:] == "xlsx" and file[:2] != '.~':
+                    '''只收集Excel文件 同时过滤用软件打开生成的临时文件'''
                     self.house_file_list.append(os.path.abspath(os.path.join(os.getcwd(), root, file)))
 
 if __name__ == "__main__":
