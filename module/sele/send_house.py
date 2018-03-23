@@ -307,18 +307,10 @@ class SendHouse(PageLogin, ImgLoader):
         # 因为网络延迟和DOM加载需要时间
         room_img_count=0
         for img in house_imgs[:-1]:
-            self.upload_img(img)
-            
-            time.sleep(1)
-            room_img_count+=1
-
-            while True:
-                boxes = browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
-                upload_box_length = len(browser.find_elements_by_css_selector("#room-upload-display > div"))-1
-                if upload_box_length == room_img_count:
-                    break
-                # 当等待超过10秒，说明上传过程出现错误，例如图片参数不对
-                time.sleep(1)
+            try:
+                self.upload_img(img, room_img_count)
+            except Exception:
+                sele_warn("上传图片超时... 本条图片已忽略")
 
         if self.send_ajk == True:
             # 上传户型图图片
@@ -386,8 +378,19 @@ class SendHouse(PageLogin, ImgLoader):
         else:
             pass
     
-    @set_timeout(5)
-    def upload_img(self, img):
-        '''上传单张图片 超时时间为5秒'''
+
+    @set_timeout(12)
+    def upload_img(self, img, room_img_count):
+        '''上传单张图片 超时时间为12秒'''
+        t1 = time.time()
         room_image = self.browser.find_element_by_id("room_fileupload")
         room_image.send_keys(img)
+        time.sleep(0.5)
+        room_img_count += 1
+
+        while True:
+            boxes = self.browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
+            upload_box_length = len(self.browser.find_elements_by_css_selector("#room-upload-display > div"))-1
+            if upload_box_length == room_img_count:
+                break
+            time.sleep(0.5)
