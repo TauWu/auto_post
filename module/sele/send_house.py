@@ -6,6 +6,12 @@ from ..sele.page_login import PageLogin
 from util.common.img_loader import ImgLoader
 from util.common.timeout import set_timeout
 
+def get_house_code(code):
+    code = str(code)
+    length = 6 - len(code)
+    house_code = "SH-%s%s"%("0"*length, code)
+    return house_code
+
 class SendHouse(PageLogin, ImgLoader):
 
     def __init__(self, username, house_list=[], browser=None):
@@ -149,7 +155,7 @@ class SendHouse(PageLogin, ImgLoader):
         # 输入房源编号
         housecode = browser.find_element_by_name("housecode")
         housecode.clear()
-        housecode.send_keys("SH%s" % (str(idx)))
+        housecode.send_keys(get_house_code(idx))
 
         # 输入地标名称
         community_e = browser.find_element_by_xpath("""//*[@id="community_unite"]""")
@@ -306,11 +312,16 @@ class SendHouse(PageLogin, ImgLoader):
         # 每次完一张图片，要等待上传框再次显示才能传下一张
         # 因为网络延迟和DOM加载需要时间
         room_img_count=0
+        img_err_count = 0
         for img in house_imgs[:-1]:
             try:
                 room_img_count = self.upload_img(img, room_img_count)
             except Exception:
+                img_err_count += 1
                 sele_warn("上传图片超时... 本条图片已忽略")
+        
+        if img_err_count > 4:
+            raise RuntimeError("上传图片数量不足！")
 
         if self.send_ajk == True:
             # 上传户型图图片
