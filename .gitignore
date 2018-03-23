@@ -4,3 +4,4 @@ config.py
 .vscode/
 *.xlsx
 test/
+downloader.sh

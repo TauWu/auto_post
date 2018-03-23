@@ -43,9 +43,8 @@ cd /data/bin
 tar zxvf test.user0.tar.gz
 cp /data/code/auto_post/bin/geckodriver /bin/
 cp /data/code/auto_post/bin/smb.conf /etc/samba/smb.conf
-cp /data/code/auto_post/shell/开始发布 ~/Desktop
-cp /data/code/auto_post/shell/数据导入 ~/Desktop
-cp /data/code/auto_post/shell/用户操作 ~/Desktop
+ln /data/code/auto_post/shell/开始发布 ~/Desktop/开始发布
+ln /data/code/auto_post/shell/用户操作 ~/Desktop/用户操作
 
 # 创建数据库
 mysql -u root -p < /data/code/auto_post/database/create_database.sql
