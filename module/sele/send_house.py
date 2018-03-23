@@ -308,7 +308,7 @@ class SendHouse(PageLogin, ImgLoader):
         room_img_count=0
         for img in house_imgs[:-1]:
             try:
-                self.upload_img(img, room_img_count)
+                room_img_count = self.upload_img(img, room_img_count)
             except Exception:
                 sele_warn("上传图片超时... 本条图片已忽略")
 
@@ -385,12 +385,12 @@ class SendHouse(PageLogin, ImgLoader):
         t1 = time.time()
         room_image = self.browser.find_element_by_id("room_fileupload")
         room_image.send_keys(img)
-        time.sleep(0.5)
+        time.sleep(1)
         room_img_count += 1
 
         while True:
             boxes = self.browser.find_elements_by_css_selector("#room-upload-display > div:nth-child(1)")
             upload_box_length = len(self.browser.find_elements_by_css_selector("#room-upload-display > div"))-1
             if upload_box_length == room_img_count:
-                break
-            time.sleep(0.5)
+                return room_img_count
+            time.sleep(1)
