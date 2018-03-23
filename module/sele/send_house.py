@@ -9,7 +9,7 @@ from util.common.timeout import set_timeout
 def get_house_code(code):
     code = str(code)
     length = 6 - len(code)
-    house_code = "SH-%s%s"%("0"*length, code)
+    house_code = "SH%s%s"%("0"*length, code)
     return house_code
 
 class SendHouse(PageLogin, ImgLoader):
@@ -125,7 +125,7 @@ class SendHouse(PageLogin, ImgLoader):
         
         # 检查房源图片
         try:
-            self.img = ImgLoader("/data/imgs/%d/"%(random.randint(0,99)))
+            self.img = ImgLoader("/data/imgs/%d/"%(random.randint(0,100)))
         except Exception:
             raise
 
