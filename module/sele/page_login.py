@@ -63,8 +63,7 @@ class PageLogin():
 
     def __login_base__(self, url):
         '''通过FireFox配置文件打开登录页面'''
-        # FireFoxDir = "/data/bin/user.{username}".format(username=self.username)
-        FireFoxDir = "/data/bin/test.user0".format(username=self.username)
+        FireFoxDir = "/data/bin/user.login"
         try:
             profile = webdriver.FirefoxProfile(FireFoxDir)
             profile.native_events_enabled = True
