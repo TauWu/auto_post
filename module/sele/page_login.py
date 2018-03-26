@@ -44,8 +44,13 @@ class PageLogin():
     
     @property
     def __skip_broker__(self):
-        broker_element = WebDriverWait(self.browser, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.apply-link')))
-        broker_element.click()
+        try:
+            broker_element = WebDriverWait(self.browser, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.apply-link')))    # 实名认证等没有到期
+            broker_element.click()
+        except Exception:
+            broker_element = WebDriverWait(self.browser, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#js_sms')))        # 实名认证等到期，点击右上方消息按钮
+            broker_element.click()
+
 
     @property
     def __login_to_url__(self):
@@ -66,6 +71,7 @@ class PageLogin():
 
     def __login_base__(self, url):
         '''通过FireFox配置文件打开登录页面'''
+        # FireFoxDir = "/data/bin/user.{username}".format(username=self.username)
         FireFoxDir = "/data/bin/user.login"
         try:
             profile = webdriver.FirefoxProfile(FireFoxDir)
