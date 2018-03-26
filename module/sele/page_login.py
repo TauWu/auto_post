@@ -33,8 +33,11 @@ class PageLogin():
                 self.__skip_broker__    #跳过验证 登录成功交出浏览器对象
             elif to_url == 2:
                 sele_info("用户[%s]首次在本台机器登录，需要输入验证码..."%self.username)
-                self.__input_code__     #输入手机验证码
-                self.__login_58_sub__   #重新登录
+                # self.__input_code__     #输入手机验证码
+                # self.__login_58_sub__   #重新登录
+                #TODO 目前没有较好的复制profile文件的办法，改为手动干涉
+                self.browser.quit()
+                raise SystemExit("没有验证信息，程序退出，需要手动登录一遍后再尝试本程序！")
 
             sele_info("用户[%s]登录成功！"%self.username)
             return self.browser
