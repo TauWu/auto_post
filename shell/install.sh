@@ -15,15 +15,6 @@ pip3 install openpyxl
 pip3 install PyMySQL
 pip3 install pillow
 
-# git基础配置
-echo "请输入您的git用户名"
-read username
-git config --global user.name "$username"
-
-echo "请输入您的git邮箱"
-read email
-git config --global user.email "$email"
-
 # 在指定目录Clone项目
 mkdir /data
 mkdir /data/code
@@ -43,12 +34,8 @@ cd /data/bin
 tar zxvf test.user0.tar.gz
 cp /data/code/auto_post/bin/geckodriver /bin/
 cp /data/code/auto_post/bin/smb.conf /etc/samba/smb.conf
-ln /data/code/auto_post/shell/开始发布 ~/Desktop/开始发布
-ln /data/code/auto_post/shell/用户操作 ~/Desktop/用户操作
 
 # 创建数据库
 mysql -u root -p < /data/code/auto_post/database/create_database.sql
-cd auto_post
-./auto_post_main.py
 
 echo "安装完成，请按照提示发送房源信息表格和图片"
