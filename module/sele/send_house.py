@@ -106,12 +106,19 @@ class SendHouse(PageLogin, ImgLoader):
             raw_text = browser.page_source
             re_choose_web_1 = re.findall("""<input id=\"chooseWeb_1\".+value=\"1\"(.+)type.+""", raw_text)[0].strip()
             re_choose_web_2 = re.findall("""<input id=\"chooseWeb_2\".+value=\"2\"(.+)type.+""", raw_text)[0].strip()
-            if re_choose_web_1 == "" and self.send_ajk == True:
-                platform_anjuke = browser.find_element_by_id("chooseWeb_1")
-                platform_anjuke.click()
+
+            if self.send_ajk == True:   # 发送安居客
+                if re_choose_web_1 == "":
+                    platform_anjuke = browser.find_element_by_id("chooseWeb_1")
+                    platform_anjuke.click()
+            else:
+                if re_choose_web_1 != "":
+                    platform_anjuke = browser.find_element_by_id("chooseWeb_1")
+                    platform_anjuke.click()
             if re_choose_web_2 == "":
                 platform_58 = browser.find_element_by_id("chooseWeb_2")
                 platform_58.click()
+
             queding.click()
 
         self.browser = browser
