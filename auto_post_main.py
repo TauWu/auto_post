@@ -66,11 +66,11 @@ def send_cmd(username):
                     size = int(input("请输入需要推广的数量"))
                     size_list.append(size)
                     housetype = int(input("请输入房源类型（几室）"))
-                    source = int(input("请输入房源来源（1-推广 2-本地）"))
-                    if source not in [1, 2]:
+                    source = int(input("请输入房源来源（1-推广 2-本地 3-集中式 4-第三方）"))
+                    if source not in [1, 2, 3]:
                         raise ValueError("类型错误！")
-                except Exception:
-                    base_warn("推广数量、房源类型、房源来源请输入数字！")
+                except Exception as e:
+                    base_warn("推广数量、房源类型、房源来源请输入数字！ Err:%s"%str(e))
                 else:
                     break
             base_info("筛选房源中...")
