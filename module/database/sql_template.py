@@ -38,7 +38,7 @@ house_search_sql = '''
 select
     sheet, idx, community, addr, concat(floor),  -- 这里修改了房源名称为地址
     concat(total_floor), concat(area), concat(price),
-    title, concat(house_type)
+    title, concat(house_type), source
 from
     auto_post_house_info
 %s
