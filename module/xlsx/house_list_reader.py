@@ -64,9 +64,9 @@ def vaild_content(filename, sheetname, index, content):
         except Exception:
             raise RuntimeError("来源不是数字")
 
-        if source == 4:
-            '''针对第三方房源的二次检查 - 地址全部丢弃'''
-            full_address = "//"
+        # if source == 4:
+        #     '''针对第三方房源的二次检查 - 地址全部丢弃'''
+        #     full_address = "//"
 
     except Exception as e:
         vld_err("文件[%s] 表格[%s] 序号[%s] %s 该条数据已经忽略"%(filename, sheetname, str(index), str(e)))
