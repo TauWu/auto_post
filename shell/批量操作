@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /data/code/auto_post
+
+python3 auto_post_task.py
+sh task.sh
