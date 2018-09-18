@@ -5,3 +5,4 @@ config.py
 *.xlsx
 test/
 downloader.sh
+task.sh
