@@ -96,7 +96,7 @@ class HouseListReader(XlsxReader):
             if single_dict(title)[1] == houseinfo_sheet_comfirm_list:
                 self.comfirm_sheet.append(single_dict(title)[0])
             else:
-                vld_err("文件[%s] 表格[%s] 的标题不正确 该张表数据已全部忽略"%(self.file, single_dict(title)[0]))
+                vld_err("文件[{0}] 表格[{1}] 的标题不正确 该张表数据已全部忽略 Error Title:{2}".format(self.file, single_dict(title)[0], str(single_dict(title)[1])))
         return self.comfirm_sheet
     
     @property
@@ -117,5 +117,4 @@ class HouseListReader(XlsxReader):
         '''清洗数据并返回'''
         self.vaild_titles
         self.vaild_contents
-        print(self.comfirm_house_info)
         return self.comfirm_house_info
